@@ -14,16 +14,17 @@ class TextTestResult(BaseTextTestResult):
         super().__init__(*args, **kwargs)
         self.passed = []
         self.handler = StreamHandler(sys.stdout)
+        self.stopped = False
 
     def addSuccess(self, test: TestCase):
         super().addSuccess(test)
+        self.stream.write('## Ending Test ##\n')
         self.passed.append(test)
-        self.stream.write('\n## Ending Test ##')
         logger = getLogger('djongo')
         logger.setLevel(INFO)
 
     def startTest(self, test):
-        self.stream.write('## Starting Test ##\n')
+        self.stream.write('\n## Starting Test ##\n')
         super().startTest(test)
         logger = getLogger('djongo')
         logger.setLevel(DEBUG)
@@ -31,6 +32,15 @@ class TextTestResult(BaseTextTestResult):
             logger.removeHandler(self.handler)
         self.handler = StreamHandler(sys.stdout)
         logger.addHandler(self.handler)
+
+    def stopTest(self, test):
+        super().stopTest(test)
+        self.stopped = True
+
+    def addError(self, test, err):
+        if self.stopped:
+            self.buffer = False
+        super().addError(test, err)
 
 
 class TextTestRunnerFactory:

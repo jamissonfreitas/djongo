@@ -81,9 +81,8 @@ PARSER_ARGS = {
     '--discover-tests': {
         'action': 'store_true',
     },
-    '--run-specific': {
-        'default': None,
-        'type': str,
+    '--check-specific': {
+        'action': 'store_true',
     },
 }
 
@@ -304,11 +303,22 @@ class TestManager:
         for test, trace in chain(result.failures, result.errors, result.unexpectedSuccesses):
             self.result_list['failing'].append(test.id())
         self.result_list['failing'].sort()
+        print('failing')
+        print(self.result_list['failing'])
 
         self.result_list['passing'].clear()
         for test in result.passed:
             self.result_list['passing'].append(test.id())
         self.result_list['passing'].sort()
+        print('passing')
+        print(self.result_list['passing'])
+
+    def check_specific(self):
+        result = setup_tests.test_exec(self.parsed)
+        if any(chain(result.failures, result.errors, result.unexpectedSuccesses)):
+            return -1
+        else:
+            return 0
 
     def run(self):
         if self.parsed.discover_tests:
@@ -320,9 +330,10 @@ class TestManager:
             self.store_test_list(self.test_list)
 
         if self.parsed.check_currently_passing:
-            return check_passing()
-        if self.parsed.run_specific:
-            return check_specific()
+            return self.check_passing()
+
+        if self.parsed.check_specific:
+            return self.check_specific()
 
     @staticmethod
     def store_test_list(test_data):
