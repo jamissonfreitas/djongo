@@ -8,7 +8,7 @@ import subprocess
 import sys
 from itertools import chain
 from json import JSONDecodeError
-from typing import Literal
+# from typing import Literal
 
 from test_utils import setup_tests
 
@@ -24,9 +24,9 @@ TEST_VERSIONS = ('v21', 'v22', 'v30')
 PY_VERSIONS = ('p36', 'p38')
 DB_VERSIONS = ('sqlite', 'mongodb')
 
-TEST_LITERAL = Literal['v21', 'v22', 'v30']
-PY_LITERAL = Literal['p36', 'p38']
-DB_LITERAL = Literal['sqlite', 'mongodb']
+# TEST_LITERAL = Literal['v21', 'v22', 'v30']
+# PY_LITERAL = Literal['p36', 'p38']
+# DB_LITERAL = Literal['sqlite', 'mongodb']
 
 #
 # class TestResult(TypedDict):

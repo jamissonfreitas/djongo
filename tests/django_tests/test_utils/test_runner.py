@@ -35,13 +35,13 @@ class TextTestResult(BaseTextTestResult):
 
     def stopTest(self, test):
         super().stopTest(test)
-        self.stopped = True
 
     def addError(self, test, err):
-        if self.stopped:
-            self.buffer = False
         super().addError(test, err)
 
+    # def _exc_info_to_string(self, err, test):
+    #     if self.buffer and hasattr(sys.stdout, 'getvalue'):
+    #         super()._exc_info_to_string(err, test)
 
 class TextTestRunnerFactory:
 
